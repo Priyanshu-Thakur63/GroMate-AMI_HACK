@@ -1,0 +1,22 @@
+enum SentimentLabel {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+  URGENT
+}
+
+model SocialSentiment {
+  id             String         @id @default(uuid())
+  zoneId         String?
+  zone           Zone?          @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  platform       String         @default("Civic Feed")
+  content        String
+  sentimentScore Float          // -1.0 to +1.0
+  sentimentLabel SentimentLabel @default(NEUTRAL)
+  keywords       String[]       @default([])
+  latitude       Float?
+  longitude      Float?
+  postedAt       DateTime       @default(now())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt
+}

@@ -1,0 +1,35 @@
+enum DisasterType {
+  FLOOD
+  EARTHQUAKE
+  CYCLONE
+  WILDFIRE
+  LANDSLIDE
+  CHEMICAL_SPILL
+  HEATWAVE
+  OTHER
+}
+
+enum DisasterStatus {
+  ACTIVE
+  CONTAINED
+  RESOLVED
+}
+
+model Disaster {
+  id               String         @id @default(uuid())
+  zoneId           String?
+  zone             Zone?          @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  title            String
+  disasterType     DisasterType   @default(OTHER)
+  severity         SeverityLevel  @default(HIGH)
+  status           DisasterStatus @default(ACTIVE)
+  description      String
+  instructions     String?        // Safety/evacuation guidance
+  affectedRadiusKm Float          @default(5.0)
+  latitude         Float
+  longitude        Float
+  declaredAt       DateTime       @default(now())
+  endedAt          DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt
+}

@@ -1,0 +1,42 @@
+{
+  "name": "citypulse-backend",
+  "version": "1.0.0",
+  "description": "CityPulse Civic Health & Resilience Platform REST API Backend",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "prisma:generate": "prisma generate --schema=./prisma/schema",
+    "prisma:push": "prisma db push --schema=./prisma/schema",
+    "prisma:migrate": "prisma migrate dev --schema=./prisma/schema",
+    "prisma:studio": "prisma studio --schema=./prisma/schema",
+    "seed": "node src/database/seed.js"
+  },
+  "prisma": {
+    "schema": "./prisma/schema"
+  },
+  "keywords": [
+    "express",
+    "prisma",
+    "postgresql",
+    "civic-health",
+    "weather-api",
+    "air-quality",
+    "disaster-management"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "axios": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "prisma": "^6.4.1"
+  }
+}

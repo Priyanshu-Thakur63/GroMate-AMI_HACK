@@ -1,0 +1,19 @@
+model Zone {
+  id               String            @id @default(uuid())
+  name             String            @unique
+  code             String            @unique
+  city             String            @default("Jaipur")
+  state            String            @default("Rajasthan")
+  latitude         Float
+  longitude        Float
+  radiusKm         Float             @default(5.0)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @default(now()) @updatedAt
+
+  weatherData      WeatherData[]
+  incidentReports  IncidentReport[]
+  airQualityData   AirQuality[]
+  socialSentiments SocialSentiment[]
+  disasters        Disaster[]
+  pulseScores      PulseScoreLog[]
+}

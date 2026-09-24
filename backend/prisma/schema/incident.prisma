@@ -1,0 +1,44 @@
+enum IncidentCategory {
+  WATERLOGGING
+  POWER_OUTAGE
+  FALLEN_TREE
+  TRAFFIC_JAM
+  ROAD_DAMAGE
+  FIRE
+  GAS_LEAK
+  STRUCTURAL_COLLAPSE
+  OTHER
+}
+
+enum SeverityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model IncidentReport {
+  id              String           @id @default(uuid())
+  zoneId          String?
+  zone            Zone?            @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  title           String
+  description     String
+  category        IncidentCategory @default(OTHER)
+  severity        SeverityLevel    @default(MEDIUM)
+  status          IncidentStatus   @default(OPEN)
+  address         String?
+  latitude        Float
+  longitude       Float
+  reporterName    String?
+  reporterContact String?
+  reportedAt      DateTime         @default(now())
+  resolvedAt      DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+}
