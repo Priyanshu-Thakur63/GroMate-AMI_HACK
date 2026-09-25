@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import StatCard from "../components/StatCard";
@@ -7,6 +8,31 @@ import TrendChart from "../components/TrendChart";
 import AIInsights from "../components/AIInsights";
 
 function Dashboard() {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const hours = time.getHours();
+  const greeting =
+    hours < 12 ? "Good morning" : hours < 17 ? "Good afternoon" : "Good evening";
+
+  const formattedDate = time.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const formattedTime = time.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+
   return (
     <div className="app">
       <Sidebar />
@@ -17,23 +43,23 @@ function Dashboard() {
         <div className="dashboard-content">
           <section className="welcome-section">
             <div>
-              <span className="eyebrow">GOOD EVENING</span>
+              <span className="eyebrow">{greeting.toUpperCase()}</span>
 
               <h1>
-                Good evening, Jaipur <span>👋</span>
+                {greeting}, Jaipur <span>👋</span>
               </h1>
 
               <p>
-                Here's what's happening across the city right now.
+                Live civic health, weather telemetry, and infrastructure monitoring across Jaipur.
               </p>
             </div>
 
             <div className="system-area">
               <div className="current-time">
                 <span>▣</span>
-                Thursday, 24 September 2026
+                {formattedDate}
                 <span>◷</span>
-                4:43:21 PM
+                {formattedTime}
               </div>
 
               <div className="system-status">
@@ -42,7 +68,7 @@ function Dashboard() {
                 <div>
                   <strong>All systems operational</strong>
                   <p>
-                    City infrastructure and monitoring systems are online.
+                    PostgreSQL database and live OpenWeather stream active.
                   </p>
                 </div>
               </div>

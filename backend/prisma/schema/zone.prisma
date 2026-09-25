@@ -1,14 +1,14 @@
 model Zone {
-  id               String            @id @default(uuid())
-  name             String            @unique
-  code             String            @unique
-  city             String            @default("Jaipur")
-  state            String            @default("Rajasthan")
+  id               String             @id @default(uuid())
+  name             String             @unique
+  code             String             @unique
+  city             String             @default("Jaipur")
+  state            String             @default("Rajasthan")
   latitude         Float
   longitude        Float
-  radiusKm         Float             @default(5.0)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @default(now()) @updatedAt
+  radiusKm         Float              @default(5.0)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt
 
   weatherData      WeatherData[]
   incidentReports  IncidentReport[]
@@ -16,4 +16,7 @@ model Zone {
   socialSentiments SocialSentiment[]
   disasters        Disaster[]
   pulseScores      PulseScoreLog[]
+  observations     CivicObservation[]
+  anomalies        AnomalyLog[]
+  correlations     CorrelationLog[]
 }

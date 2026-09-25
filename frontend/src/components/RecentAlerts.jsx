@@ -3,9 +3,13 @@ import {
   CloudRain,
   CarFront,
   Route,
+  Zap,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { apiService } from "../services/api";
 
-const alerts = [
+const defaultAlerts = [
   {
     title: "Waterlogging detected",
     location: "Tonk Road, Jaipur",
@@ -41,6 +45,24 @@ const alerts = [
 ];
 
 function RecentAlerts() {
+  const [alerts, setAlerts] = useState(defaultAlerts);
+
+  useEffect(() => {
+    apiService.fetchIncidents().then((res) => {
+      if (res.success && res.data && res.data.length > 0) {
+        const mapped = res.data.slice(0, 4).map((item) => ({
+          title: item.title,
+          location: item.address || item.zone?.name || "Jaipur",
+          description: item.description,
+          severity: item.severity === "CRITICAL" || item.severity === "HIGH" ? "High" : "Medium",
+          type: item.category === "WATERLOGGING" ? "rain" : item.category === "POWER_OUTAGE" ? "power" : item.category === "TRAFFIC_JAM" ? "traffic" : "road",
+          time: new Date(item.reportedAt || Date.now()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        }));
+        setAlerts(mapped);
+      }
+    });
+  }, []);
+
   return (
     <section className="panel-card alerts-card">
       <div className="panel-heading">
@@ -49,11 +71,12 @@ function RecentAlerts() {
             <BellRing size={18} />
             Recent Alerts
           </h3>
-
           <p>Latest events across the city</p>
         </div>
 
-        <button>View all →</button>
+        <Link to="/events" style={{ textDecoration: "none" }}>
+          <button>View all →</button>
+        </Link>
       </div>
 
       <div className="alerts-list">
@@ -63,6 +86,8 @@ function RecentAlerts() {
               ? CarFront
               : alert.type === "road"
               ? Route
+              : alert.type === "power"
+              ? Zap
               : CloudRain;
 
           return (

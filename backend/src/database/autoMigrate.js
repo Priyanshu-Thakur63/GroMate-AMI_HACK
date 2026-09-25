@@ -16,7 +16,7 @@ async function runAutoMigration() {
 
     // 2. Execute Prisma schema synchronization programmatically
     const projectRoot = path.resolve(__dirname, '../../');
-    const command = 'npx prisma db push --schema=./prisma/schema --accept-data-loss';
+    const command = 'npx prisma db push --skip-generate --schema=./prisma/schema --accept-data-loss';
 
     console.log(`[Auto-Migration] Synchronizing schema models to PostgreSQL...`);
     const output = execSync(command, {

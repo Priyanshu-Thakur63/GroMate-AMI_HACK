@@ -1,0 +1,53 @@
+model CivicObservation {
+  id               String   @id @default(uuid())
+  source           String   // e.g. "OPEN_METEO_WEATHER", "OPEN_METEO_AQ", "JAIPUR_INCIDENT", "GNEWS"
+  category         String   // "WEATHER", "AIR_QUALITY", "INCIDENT", "SENTIMENT", "DISASTER"
+  metricType       String   // "TEMPERATURE", "RAINFALL", "PM25", "AQI", "INCIDENT_EVENT", "PUBLIC_TONE"
+  value            Float
+  unit             String   // "celsius", "mm", "ug/m3", "score", "level_1_to_5"
+  severity         String   @default("NORMAL") // "NORMAL", "MODERATE", "ELEVATED", "CRITICAL"
+  latitude         Float
+  longitude        Float
+  observedAt       DateTime
+  ingestedAt       DateTime @default(now())
+  freshnessSeconds Int      @default(0)
+  metadata         Json?
+  
+  zoneId           String
+  zone             Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
+
+  @@index([category, metricType, observedAt])
+  @@index([zoneId, observedAt])
+}
+
+model AnomalyLog {
+  id          String   @id @default(uuid())
+  zoneId      String
+  zone        Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  metricType  String   // "RAINFALL_SPIKE", "AQI_HAZARD", "INCIDENT_CLUSTER", "SENTIMENT_PLUNGE"
+  severity    String   // "MODERATE", "ELEVATED", "CRITICAL"
+  deviationZ  Float    // Calculated Z-score
+  message     String
+  detectedAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  @@index([zoneId, detectedAt])
+}
+
+model CorrelationLog {
+  id         String   @id @default(uuid())
+  zoneId     String
+  zone       Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  title      String
+  summary    String   // Plain language AI explanation
+  confidence Float    // 0.0 to 1.0
+  sources    Json     // Array of involved source categories/IDs
+  detectedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@index([zoneId, detectedAt])
+}
